@@ -120,7 +120,7 @@ function search_word(word) {
         var reg_fanyiContentWrp = /fanyi_contentWrp"[\W\w]*?翻译结果[\W\w]*?trans-container[\W\w]*?<p>[\W\w]*?<\/p>([\W\w]*?)<\/p>/im;
         var str_fanyiContentWrp = reg_fanyiContentWrp.exec(data)
         if (str_fanyiContentWrp != null) {
-            append_html += '<h2>翻译</h2><ul><li>' + str_fanyiContentWrp[1] + '</li></ul>';
+            append_html += '<h2>翻译</h2><ul><li>' + filterATag(str_fanyiContentWrp[1]) + '</li></ul>';
         }
 
         // //柯林斯英汉双解大辞典
@@ -130,6 +130,12 @@ function search_word(word) {
         //     append_html += '<h2>柯林斯英汉双解大辞典</h2><ul><li>' + str_fanyiContentWrp[1] + '</li></ul>';
         // }
 
+        //您是不是要找：
+        var reg_typoContentWrp = /typo trans-container"[\W\w]*?<ul>([\W\w]*?)<\/ul/im;
+        var str_typoCcontentWrp = reg_typoContentWrp.exec(data)
+        if (str_typoCcontentWrp != null) {
+            append_html += '<h2>您可能要找：</h2><ul>' + str_typoCcontentWrp[1] + '</ul>';
+        }
 
         $(".content").append(append_html);
         setTimeout(function () {
@@ -145,12 +151,12 @@ function search_word(word) {
 
 
 
-        getHlsDic(word, $(".content"));
-        getNetDic(word, $(".content"));
-        getShuangyuDic(word, $(".content"));
-        getYuanshengDic(word, $(".content"));
-        getTongyiDic(word, $(".content"));
-        getQuanweiDic(word, $(".content"));
+        getHlsDic(word);
+        getNetDic(word);
+        getShuangyuDic(word);
+        getYuanshengDic(word);
+        getTongyiDic(word);
+        getQuanweiDic(word);
         getEeDic(word);
     });
 }
@@ -288,7 +294,7 @@ function shake(ele, cls, times) {
 };
 
 
-function getHlsDic(word, content) {
+function getHlsDic(word) {
     var url = 'https://m.youdao.com/singledict?q=' + word + '&dict=collins&le=eng&more=false';
 
     $.get(url, function (data) {
@@ -298,15 +304,15 @@ function getHlsDic(word, content) {
     });
 }
 
-function getNetDic(word, content) {
+function getNetDic(word) {
     var url = 'https://m.youdao.com/singledict?q=' + word + '&dict=web_trans&le=eng&more=false';
     $.get(url, function (data) {
         // data = '<h2>网络释义</h2><ul>' + data + '</ul>';
         // content.append(data);
-        $("#collins").html(data);
+        $("#web_trans").html(data);
     });
 }
-function getShuangyuDic(word, content) {
+function getShuangyuDic(word) {
     var url = 'https://m.youdao.com/singledict?q=' + word + '&dict=blng_sents_part&le=eng&more=false';
     $.get(url, function (data) {
         // data = '<h2>双语例句</h2><ul>' + data + '</ul>';
@@ -314,7 +320,7 @@ function getShuangyuDic(word, content) {
         $("#blng_sents_part").html(data);
     });
 }
-function getEeDic(word, content) {
+function getEeDic(word) {
     var url = 'https://m.youdao.com/singledict?q=' + word + '&dict=ee&le=eng&more=false';
     $.get(url, function (data) {
         // data = '<h2>英英释义</h2><ul>' + data + '</ul>';
@@ -322,7 +328,7 @@ function getEeDic(word, content) {
         $("#ee").html(data);
     });
 }
-function getTongyiDic(word, content) {
+function getTongyiDic(word) {
     var url = 'https://m.youdao.com/singledict?q=' + word + '&dict=syno&le=eng&more=false';
     $.get(url, function (data) {
         // data = '<h2>同近义词</h2><ul>' + data + '</ul>';
@@ -330,7 +336,7 @@ function getTongyiDic(word, content) {
         $("#syno").html(data);
     });
 }
-function getYuanshengDic(word, content) {
+function getYuanshengDic(word) {
     var url = 'https://m.youdao.com/singledict?q=' + word + '&dict=media_sents_part&le=eng&more=false';
     $.get(url, function (data) {
         // data = '<h2>原生例句</h2><ul>' + data + '</ul>';
@@ -339,7 +345,7 @@ function getYuanshengDic(word, content) {
 
     });
 }
-function getQuanweiDic(word, content) {
+function getQuanweiDic(word) {
     var url = 'https://m.youdao.com/singledict?q=' + word + '&dict=auth_sents_part&le=eng&more=false';
     $.get(url, function (data) {
         // data = '<h2>权威例句</h2><ul>' + data + '</ul>';
@@ -348,9 +354,6 @@ function getQuanweiDic(word, content) {
     });
 }
 
-function dic(word) {
-
-}
 
 var initVoice = function () {
     var player = document.getElementById('dictVoice');

@@ -110,16 +110,6 @@ body{
 }
 
 
-
-.top-line{
-    height: 0;
-    border-top: 1px #e0e0e0 dotted;
-    position: sticky;
-    top: 0px;
-    left: 0;
-}
-
-
 .collect-item-delete{
     color: #ff6409;
     position: relative;

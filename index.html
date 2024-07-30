@@ -9,7 +9,6 @@
 </head>
 
 <body>
-    <div class="top-line"></div>
     <div class="content">
     </div>
 
@@ -22,26 +21,24 @@
         <audio id="dictVoice" style="display: none"></audio>
     </div>
      
+    <div class=" typo trans-container">
+
+    </div>
+
     <div id='bd'>
-        <div id="collins_contentWrp" class="content-wrp dict-container closed">
+        <div id="collins_contentWrp" class="content-wrp dict-container opened">
             <h4><a class="trans-title" href="#collins">柯林斯英汉双解大辞典</a></h4>
             <div id="collins" class="trans-container collins ">
             </div>
         </div>
 
-        <div id="web_trans_contentWrp" class="content-wrp dict-container closed">
-            <h4><a class="trans-title" href="#web_trans">网络释义</a></h4>
-            <div id="web_trans" class="trans-container web_trans ">
-            </div>
-        </div>
-
-        <div id="syno_contentWrp" class="content-wrp dict-container closed">
+        <div id="syno_contentWrp" class="content-wrp dict-container opened">
             <h4><a class="trans-title" href="#syno">同近义词</a></h4>
             <div id="syno" class="trans-container syno ">
             </div>
         </div>
 
-        <div id="blng_sents_part_contentWrp" class="content-wrp dict-container closed">
+        <div id="blng_sents_part_contentWrp" class="content-wrp dict-container opened">
             <h4><a class="trans-title" href="#blng_sents_part">双语例句</a></h4>
             <div id="blng_sents_part" class="trans-container blng_sents_part dict_sents_result">
             </div>
@@ -52,11 +49,19 @@
             <div id="media_sents_part" class="trans-container media_sents_part dict_sents_result">
             </div>
         </div>
+
         <div id="ee_contentWrp" class="content-wrp dict-container closed">
             <h4><a class="trans-title" href="#ee">英英释义</a></h4>
             <div id="ee" class="trans-container ee ">
             </div>
         </div>
+
+        <div id="web_trans_contentWrp" class="content-wrp dict-container closed">
+            <h4><a class="trans-title" href="#web_trans">网络释义</a></h4>
+            <div id="web_trans" class="trans-container web_trans ">
+            </div>
+        </div>
+
         <div id="auth_sents_part_contentWrp" class="content-wrp dict-container closed">
             <h4><a class="trans-title" href="#auth_sents_part">权威例句</a></h4>
             <div id="auth_sents_part" class="trans-container auth_sents_part dict_sents_result">
@@ -68,13 +73,13 @@
     <div id="dictNav" style="top: 0px;">
         <ul id="dictNavList" data-num="8" style="display: none; height: 288px;">
             <li class="selectLi"><a href="#ec_contentWrp">基本释义</a></li>
-            <li class="unSelectLi"><a href="#collins_contentWrp">柯林斯英汉双解大辞典</a></li>
-            <li class="unSelectLi"><a href="#web_trans_contentWrp">网络释义</a></li>
-            <li class="unSelectLi"><a href="#syno_contentWrp">同近义词</a></li>
-            <li class="unSelectLi"><a href="#blng_sents_part_contentWrp">双语例句</a></li>
-            <li class="unSelectLi"><a href="#media_sents_part_contentWrp">原声例句</a></li>
-            <li class="unSelectLi"><a href="#ee_contentWrp">英英释义</a></li>
-            <li class="unSelectLi"><a href="#auth_sents_part_contentWrp">权威例句</a></li>
+            <li class="selectLi"><a href="#collins_contentWrp">柯林斯英汉双解大辞典</a></li>
+            <li class="selectLi"><a href="#syno_contentWrp">同近义词</a></li>
+            <li class="selectLi"><a href="#blng_sents_part_contentWrp">双语例句</a></li>
+            <li class="selectLi"><a href="#media_sents_part_contentWrp">原声例句</a></li>
+            <li class="selectLi"><a href="#ee_contentWrp">英英释义</a></li>
+            <li class="selectLi"><a href="#web_trans_contentWrp">网络释义</a></li>
+            <li class="selectLi"><a href="#auth_sents_part_contentWrp">权威例句</a></li>
         </ul>
         <a id="dictNavBtn" href="#" class="">dict</a>
     </div>
