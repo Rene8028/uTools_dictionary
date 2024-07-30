@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <link rel="stylesheet" type="text/css" href="assets/index.css">
+    <link rel="stylesheet" type="text/css" href="assets/dict.css">
+    <script src="assets/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+    <div class="top-line"></div>
+    <div class="content">
+    </div>
+
+    <div class="popping-collect-list"></div>
+    <div class='collect-list'>
+    </div>
+    <div id='voice'></div>
+
+    <div id="outer">
+        <audio id="dictVoice" style="display: none"></audio>
+    </div>
+     
+    <div id='bd'>
+        <div id="collins_contentWrp" class="content-wrp dict-container closed">
+            <h4><a class="trans-title" href="#collins">柯林斯英汉双解大辞典</a></h4>
+            <div id="collins" class="trans-container collins ">
+            </div>
+        </div>
+
+        <div id="web_trans_contentWrp" class="content-wrp dict-container closed">
+            <h4><a class="trans-title" href="#web_trans">网络释义</a></h4>
+            <div id="web_trans" class="trans-container web_trans ">
+            </div>
+        </div>
+
+        <div id="syno_contentWrp" class="content-wrp dict-container closed">
+            <h4><a class="trans-title" href="#syno">同近义词</a></h4>
+            <div id="syno" class="trans-container syno ">
+            </div>
+        </div>
+
+        <div id="blng_sents_part_contentWrp" class="content-wrp dict-container closed">
+            <h4><a class="trans-title" href="#blng_sents_part">双语例句</a></h4>
+            <div id="blng_sents_part" class="trans-container blng_sents_part dict_sents_result">
+            </div>
+        </div>
+       
+        <div id="media_sents_part_contentWrp" class="content-wrp dict-container closed">
+            <h4><a class="trans-title" href="#media_sents_part">原声例句</a></h4>
+            <div id="media_sents_part" class="trans-container media_sents_part dict_sents_result">
+            </div>
+        </div>
+        <div id="ee_contentWrp" class="content-wrp dict-container closed">
+            <h4><a class="trans-title" href="#ee">英英释义</a></h4>
+            <div id="ee" class="trans-container ee ">
+            </div>
+        </div>
+        <div id="auth_sents_part_contentWrp" class="content-wrp dict-container closed">
+            <h4><a class="trans-title" href="#auth_sents_part">权威例句</a></h4>
+            <div id="auth_sents_part" class="trans-container auth_sents_part dict_sents_result">
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="dictNav" style="top: 0px;">
+        <ul id="dictNavList" data-num="8" style="display: none; height: 288px;">
+            <li class="selectLi"><a href="#ec_contentWrp">基本释义</a></li>
+            <li class="unSelectLi"><a href="#collins_contentWrp">柯林斯英汉双解大辞典</a></li>
+            <li class="unSelectLi"><a href="#web_trans_contentWrp">网络释义</a></li>
+            <li class="unSelectLi"><a href="#syno_contentWrp">同近义词</a></li>
+            <li class="unSelectLi"><a href="#blng_sents_part_contentWrp">双语例句</a></li>
+            <li class="unSelectLi"><a href="#media_sents_part_contentWrp">原声例句</a></li>
+            <li class="unSelectLi"><a href="#ee_contentWrp">英英释义</a></li>
+            <li class="unSelectLi"><a href="#auth_sents_part_contentWrp">权威例句</a></li>
+        </ul>
+        <a id="dictNavBtn" href="#" class="">dict</a>
+    </div>
+    <script src="assets/index.js"></script>
+
+     <script defer src="assets/dict.js"></script>
+    <script type="text/javascript">
+
+        trim = function (t) {
+            return t.trim ? t.trim() : t.replace(/^\s+|\s+$/gi, "")
+        }
+    </script>
+    <script type="text/javascript">
+        window.cur_query
+        var lang='eng'
+        var requestData = function (query, dictname, lang, action, callback) {
+            var url = 'https://m.youdao.com/singledict?q=' + query + '&dict=' + dictname + '&le=' + lang + "&more=false";
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status == 200) {
+                        if (typeof callback === 'function') {
+                            var data = xhr.response == undefined ? xhr.responseText : xhr.response;
+                            callback(data);
+                        }
+                    } else {
+                        console.log(xhr.status);
+                    }
+                }
+            };
+            xhr.open('get', url, true);
+            xhr.send(null);
+        };
+        var initdict = function () {
+            var i = 0, eles = document.querySelectorAll('.trans-title');
+            if (!eles) {
+                return;
+            }
+            document.addEventListener('click', function (e) {
+                var target = e.target;
+                if (target.className.indexOf('trans-title') >= 0) {
+                    var EleId = target.getAttribute('href').slice(1);
+                    var wrp = target.parentNode.parentNode;
+                    var EleIdContent = document.getElementById(EleId);
+
+
+                    if (wrp.className.indexOf("closed") > 0) {
+                        if (trim(EleIdContent.innerHTML) === '' && EleIdContent.childElementCount === 0) {
+                            requestData(cur_query, EleId, lang, 'singledict', function (data) {
+                                EleIdContent.innerHTML = data;
+                                wrp.className = "content-wrp dict-container opened";
+                            });
+                        } else {
+                            wrp.className = "content-wrp dict-container opened";
+                        }
+                    } else if (wrp.className.indexOf("opened") > 0) {
+                        wrp.className = "content-wrp dict-container closed";
+                    }
+
+
+                    e.preventDefault();
+                }
+            }, false);
+        };
+
+        var initVoice = function () {
+            var player = document.getElementById('dictVoice');
+            document.addEventListener('click', function (e) {
+                var target = e.target;
+                if (target.hasAttribute('role') && target.getAttribute('role').indexOf('dict_audio_js') >= 0) {
+                    var url = target.getAttribute('data-rel');
+                    player.setAttribute('src', url);
+                    player.volume = 1;
+                    player.play();
+                    e.preventDefault();
+                }
+            }, false);
+        };
+
+
+        var setEleTop = function (ele) {
+            var bodyScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            ele.style.top = Math.ceil((window.innerHeight - ele.offsetHeight) - 50) + bodyScrollTop + "px";
+        };
+
+        var initPosition = function () {
+            var nav = document.getElementById('dictNav');
+            setEleTop(nav);
+            document.addEventListener('orientationchange', function () {
+                setEleTop(nav);
+            }, false);
+            document.addEventListener('scroll', function () {
+                setEleTop(nav);
+            }, false)
+        };
+
+        var initDictNav = function () {
+            var dictNav = document.getElementById('dictNav'),
+                dictNavBtn = document.getElementById('dictNavBtn'),
+                lists = document.getElementById('dictNavList');
+            if (!!dictNav) {
+                var curSelLi = document.querySelector('.selectLi');
+                initPosition();
+                !!dictNavBtn && dictNavBtn.addEventListener('click', function (e) {
+                    var num = lists.getAttribute('data-num'),
+                        maxNum = 8,
+                        showHeight
+                    borderHeight = 1;
+                    if (lists.style.display === 'none' || window.getComputedStyle(lists, null).getPropertyValue('display') == "none") {
+                        dictNavBtn.className += 'selected';
+                        lists.style.display = 'block';
+                    } else if (lists.style.display === 'block') {
+                        dictNavBtn.className = '';
+                        lists.style.display = 'none';
+                    }
+                    if (lists.style.display == 'block') {
+                        var liChildHight = lists.querySelector('li').clientHeight + borderHeight;
+                        showHeight = (num >= maxNum) ? liChildHight * maxNum : liChildHight * num;
+                    }
+                    if (num > maxNum) {
+                        lists.style.overflowY = 'scroll';
+                    }
+                    var listheightStyle = window.getComputedStyle(lists, null).getPropertyValue('height');
+                    if (listheightStyle == '0px') {
+                        lists.style.height = showHeight + 'px';
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+                lists.addEventListener('click', function (e) {
+                    if (e.target.nodeName.toLowerCase() == 'a') {
+                        var navDictId = e.target.href.split('#')[1],
+                            EleId = navDictId.replace(/_contentWrp/gi, '');
+                        lists.style.display = 'none';
+                        dictNavBtn.className = '';
+                        if (trim(document.getElementById(EleId).innerHTML) !== '' && document.getElementById(EleId).childElementCount !== 0) {
+                            document.getElementById(navDictId).className = "content-wrp dict-container opened";
+                            return;
+                        }
+                        // requestData(cur_query, EleId, lang, 'singledict', function (data) {
+                        //     document.getElementById(EleId).innerHTML = data;
+                        //     document.getElementById(navDictId).className = "content-wrp dict-container opened";
+                        // });
+                        e.stopPropagation();
+                    }
+                }, false);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initdict();
+            initDictNav();
+            initVoice();
+        }, false);
+    </script>
+</body>
+
+</html>
